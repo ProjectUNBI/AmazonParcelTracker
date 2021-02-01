@@ -17,7 +17,7 @@ def getChromiumDriver() -> WebDriver:
     # chromeOptions.add_argument("disable-infobars")
     # chromeOptions.add_argument('--no-sandbox')
     # chromeOptions.add_argument('--disable-dev-shm-usage')
-    # chromeOptions.add_argument("--headless")
+    chromeOptions.add_argument("--headless")
     chromeOptions.add_argument(f"--user-data-dir={CHROME_DIR}")
     chromeOptions.add_argument(f"--profile-directory={CHROME_PROFILE}")
     driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chromeOptions)

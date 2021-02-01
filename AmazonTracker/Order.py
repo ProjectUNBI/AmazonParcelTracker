@@ -52,4 +52,4 @@ class Order:
                 if self.flag_load_counter > self.MAX_LOAD_COUNTER:
                     break
         if self.has_error_loading:
-            Alert("Error in loading data")
+            Alert("Error in loading data",self.tracking_url)

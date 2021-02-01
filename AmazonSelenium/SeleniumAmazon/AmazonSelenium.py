@@ -8,6 +8,7 @@ from AmazonSelenium.AmazonBeautifulSoup.AmazonPageUtil import load_amazon_page
 from AmazonSelenium.AmazonBeautifulSoup.AmazonSoup import AmazonSoup
 from AmazonSelenium.SeleniumAmazon.SeleniumDriverBuilder import getChromiumDriver
 from AmazonSelenium.Util import writeText
+from MyConfig.Config import AMAZON_LOADING_PAGE_LIMIT
 
 
 class AmazonSelenium():
@@ -24,8 +25,9 @@ class AmazonSelenium():
             for page in amazon_soup.pages:
                 if page == 1:  # skip as we already rendered this page
                     continue
-                # if page > 2:
-                #     break
+                if AMAZON_LOADING_PAGE_LIMIT !=0 and page > AMAZON_LOADING_PAGE_LIMIT:
+                    print("Reached page limits....")
+                    break
                 nth_page: str = load_amazon_page(driver, page)
                 amazon_soup.render(nth_page)
             self.amazon_order = json.loads(jsonpickle.encode(amazon_soup.orders))

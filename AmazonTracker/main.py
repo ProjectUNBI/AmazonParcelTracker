@@ -9,6 +9,7 @@ from MyConfig.Config import AMAZON_ORDERS
 READ_FILE_DELAY = 10*60*60
 LOAD_TRACK_DELAY = 1*60*60
 RETRY_TRACK_DELAY = 10*60
+DELAY_PER_ORDER_CHECK=1
 
 
 def read_amazon_orders(loop):
@@ -64,7 +65,7 @@ def handle_order_tracker():
         for order in trackable_order:
             order:Order=order
             order.load_order_progress()
-            time.sleep(10)# not to block by amazon srever
+            time.sleep(DELAY_PER_ORDER_CHECK)# not to block by amazon srever
         updatedataToUser(trackable_order)########We update here
         time.sleep(LOAD_TRACK_DELAY)
 
