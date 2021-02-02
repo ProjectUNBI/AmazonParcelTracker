@@ -1,6 +1,11 @@
 # AmazonParcelTracker
 AmazonParcelTracker
 
+# How it work:
+1) "run_order_list_maker" will load all your amazon order[tested for amazon.in but not for amazon.com] and export a json data which contain a lot of information about your orders. This script actually open your browser[can be open in headless,in background] using Selenium WebDriver. This script ideally should be run once a day using crontab.
+2) "runtracker" will load the extracted json data and will tract down all the trackable order and will alert if something interesting is there
+3) "runtracker" also run a Flask server so that you can check it from other pc in same network.run "run_cleint_interface" for this..
+
 # Some points:
 
 * I would like to know an alert when it my parcel is out for delivery
