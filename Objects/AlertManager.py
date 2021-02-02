@@ -1,6 +1,6 @@
 import time
 
-from AmazonTracker.FliteTTS.FliteTextToSpeeach import FliteTTS
+from Objects.FliteTTS.FliteTextToSpeeach import FliteTTS
 
 
 def Alert(alert_text,url):

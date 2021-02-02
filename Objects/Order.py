@@ -1,8 +1,8 @@
 import traceback
 from datetime import datetime
 
-from AmazonTracker.AlertManager import Alert
-from AmazonTracker.TrackSoupUtil import track
+from Objects.AlertManager import Alert
+from Objects.TrackSoupUtil import track
 
 
 class Order:
@@ -17,6 +17,7 @@ class Order:
         #####################
         self.where_to_deliver = where_to_deliver
         self.is_out_for_deliver = False
+        self.last_tract_location = []
 
         self.track_progress = {}
         self.has_error_loading = True
@@ -36,7 +37,7 @@ class Order:
             return
         while True:
             try:
-                self.track_progress, self.is_out_for_deliver = track(self.tracking_url)
+                self.track_progress, self.is_out_for_deliver, self.last_tract_location = track(self.tracking_url)
                 now = datetime.now()
                 self.loaded_time = now.timestamp() * 1000
                 self.loaded_time_human_readable = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -52,4 +53,4 @@ class Order:
                 if self.flag_load_counter > self.MAX_LOAD_COUNTER:
                     break
         if self.has_error_loading:
-            Alert("Error in loading data",self.tracking_url)
+            Alert("Error in loading data", self.tracking_url)

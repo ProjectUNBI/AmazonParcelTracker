@@ -1,0 +1,9 @@
+
+#!/bin/bash
+
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+export PYTHONPATH="$SCRIPTPATH"
+cd $PYTHONPATH
+python3 ./ClientsInterface/Cleint.py
+

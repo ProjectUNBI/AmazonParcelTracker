@@ -29,6 +29,8 @@ def track(url: str):
     tracksummary = {}
 
     flag_outfor_delivery = False
+    track_last_location = []  # storing last tract location
+    probable_track_last_location = []
 
     if "Delivered" in primarysatus_text:
         tracksummary[primarysatus_text] = True
@@ -43,15 +45,27 @@ def track(url: str):
                 continue
             point_order = track["data-start"]
             is_reach = track["data-reached"]
+            flag_product_reach=False
             if is_reach == "reached":
+                flag_product_reach=True
                 tracksummary[point_order] = True
                 flag_outfor_delivery_counter += 1
             elif is_reach == "notReached":
                 tracksummary[point_order] = False
+                track_last_location=probable_track_last_location ##we have reach the "not receive" so we can transfer it
             else:
                 raise Exception("Value error in order reach check")
+            ####lets check if order is last reach one##### if so store it
+            div_of_detail=assertSoup(track.findAll("div", {"class": "column milestone-content"}))
+            list_detail=list(div_of_detail.children)
+            if flag_product_reach:
+                probable_track_last_location=[]
+                for list_detail_child in list_detail:
+                    if type(list_detail_child) == Tag:
+                        probable_track_last_location.append(list_detail_child.text.strip())
+
         if flag_outfor_delivery_counter > 2:
             flag_outfor_delivery = True
         # print(json.dumps(tracksummary))
 
-    return tracksummary, flag_outfor_delivery
+    return tracksummary, flag_outfor_delivery,track_last_location
