@@ -8,7 +8,7 @@ AmazonParcelTracker
 
 # Some points:
 
-* I would like to know an alert when it my parcel is out for delivery
+* I would like to know an alert when my parcel is out for delivery
 * It run on Raspberry pi.. but will work in PC
 * Tested for "amazon.in" [i cannot confirm it work with amazon.com]
 * I use Chromium browser as i am using in raspberry pi
@@ -18,8 +18,8 @@ AmazonParcelTracker
 2) Edit "/AmazonSelenium/SeleniumAmazon/SeleniumDriverBuilder.py" and comment out 'chromeOptions.add_argument("--headless")' so that chrome/chromium will run in desktop,not in background.[amazon website not work in firefox-esr of raspberry pi]
 3) Test if selenium work by running "run_test_selenium" it will run "./tests/testSelenium.py". if it shows opening chrome,then it is okey.
 4) Sign in to the amazon in Chromium browser
-5) edit "./MyConfig/Config.py" and make sure your Proofile and Profile directory is set properly
-6) AMAZON_LOADING_PAGE_LIMIT in ./MyConfig/Config.py is the number of page to check the order. Put it Zero if you want to check all page
+5) edit "./MyConfig/Config.py" and make sure your Profile and Profile directory is set properly
+6) AMAZON_LOADING_PAGE_LIMIT in ./MyConfig/Config.py is the number of page to check the order. Put as Zero if you want to check all page
 7) AMAZON_ORDERS in in ./MyConfig/Config.py is the location where the extracted order detail is to be put.... 
 
 # Final steps:
