@@ -24,8 +24,7 @@ AmazonParcelTracker
 
 # Final steps:
 Lets undestand how it work......
-* Your pc will run "run_order_list_maker" every day using crontab.So run the "run_order_list_maker" using crontab for everyday.eg `0 */4 * * * /home/pi/Desktop/AmazonParcelTracker/run_order_list_maker`
-
+* Your pc will run "run_order_list_maker" every day using crontab.So run the "run_order_list_maker" using crontab for everyday <br>  `0 */4 * * * /home/pi/Desktop/AmazonParcelTracker/run_order_list_maker`
 * "run_order_list_maker" will put the extracted order detail in "AMAZON_ORDERS" [mention in ./MyConfig/Config.py]
 * "runtracker" should be run. it will check the order trackings... and ist should be always run..
 * "runtracker" also serve a Flask server, so that i can check order also from my other pc, as i connected at same network
