@@ -1,7 +1,7 @@
-from Objects.AlertManager import AlertOutOfDelivery
-from Objects.Order import Order
 from prettytable import PrettyTable
 from texttable import Texttable
+
+from Objects.Order import Order
 
 
 def updatedataToUser(data: list):
@@ -72,9 +72,6 @@ def updatedataToUser(data: list):
     t.set_cols_align(["c","c","c","c"])
     t.set_cols_valign(["m","m","m","m"])
     print(t.draw())
-    if flag_outfordelivery:
-        AlertOutOfDelivery()
-
 
 
 
@@ -146,8 +143,6 @@ def updatedataToUserType3(data: list):
         t.add_row(orderDetail)
         t.add_row(gap)
     print(t)
-    if flag_outfordelivery:
-        AlertOutOfDelivery()
 
 
 def updatedataToUserType2(data: list):
@@ -207,8 +202,6 @@ def updatedataToUserType2(data: list):
         ]
         t.add_row(orderDetail)
     print(t)
-    if flag_outfordelivery:
-        AlertOutOfDelivery()
 
 
 def updatedataToUserType1(data: list):
@@ -270,5 +263,3 @@ def updatedataToUserType1(data: list):
         ]
         t.add_row(orderDetail)
     print(t)
-    if flag_outfordelivery:
-        AlertOutOfDelivery()

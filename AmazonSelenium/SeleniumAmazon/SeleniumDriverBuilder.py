@@ -23,7 +23,6 @@ def getChromiumDriver() -> WebDriver:
     driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chromeOptions)
     return driver
 
-
 def getFireFoxDriver()->WebDriver:
     return webdriver.Firefox(firefox_profile=FIREFOX_PROFILE)
 

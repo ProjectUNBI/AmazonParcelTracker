@@ -4,16 +4,10 @@ from threading import Thread
 
 import jsonpickle
 
-from Objects.Order import Order
 from AmazonTracker.UserInteraaction import updatedataToUser
 from MyConfig.Config import AMAZON_ORDERS
-
-READ_FILE_DELAY = 5 * 60 * 60
-LOAD_TRACK_DELAY = 1 * 60 * 60
-RETRY_TRACK_DELAY = 10 * 60
-DELAY_PER_ORDER_CHECK = 30
-TRACK_PORT = 63666
-
+from Objects.Order import Order
+from AmazonTracker.Constant import *
 
 def read_amazon_orders(loop):
     global ORDER_DETAIL, READ_FILE_DELAY
@@ -65,10 +59,13 @@ def handle_order_tracker():
         trackable_order = []
         for order in orderlist:
             trackable_order.extend(make_track_order_url(order, loadtime))
+        print("",flush=True)
         for order in trackable_order:
             order: Order = order
             order.load_order_progress()
+            print(".",end="",flush=True)
             time.sleep(DELAY_PER_ORDER_CHECK)  # not to block by amazon srever
+        print("",flush=True)
         DUMP_DATA = jsonpickle.encode(trackable_order)
         updatedataToUser(trackable_order)  ########We update here
         time.sleep(LOAD_TRACK_DELAY)
@@ -86,6 +83,27 @@ def getdump():
     return DUMP_DATA
 
 
+@myflask.route('/allertalloff')
+def alertalloff():
+    global ALERT_MANAGER
+    ALERT_MANAGER.DisEngageAllAlert()
+    return '{"status":true}'
+
+
+@myflask.route('/alleroff')
+def alertoff():
+    global ALERT_MANAGER
+    ALERT_MANAGER.DisEngageAlert()
+    return '{"status":true}'
+
+@myflask.route('/offoutofdelivery')
+def offoutofdelivery():
+    global ALERT_MANAGER
+    ALERT_MANAGER.DisEngageOutOfDeliveryAlert()
+    return '{"status":true}'
+
+
+
 def serve():
     global TRACK_PORT
     myflask.run(host="0.0.0.0", port=TRACK_PORT)
@@ -98,6 +116,7 @@ ORDER_DETAIL = {}
 read_amazon_orders(False)
 DUMP_DATA = "[]"
 if __name__ == "__main__":
+    ALERT_MANAGER.start()
     thread1 = Thread(target=read_amazon_orders, args=(True,))
     thread1.start()
     thread2 = Thread(target=handle_order_tracker)

@@ -1,7 +1,7 @@
 import traceback
 from datetime import datetime
 
-from Objects.AlertManager import Alert
+from AmazonTracker.Constant import ALERT_MANAGER
 from Objects.TrackSoupUtil import track
 
 
@@ -42,6 +42,8 @@ class Order:
                 self.loaded_time = now.timestamp() * 1000
                 self.loaded_time_human_readable = now.strftime("%Y-%m-%d %H:%M:%S")
                 self.has_error_loading = False
+                if self.is_out_for_deliver:
+                    ALERT_MANAGER.AlertOutOfDelivery()
             except:
                 self.has_error_loading = True
                 traceback.print_exc()
@@ -53,4 +55,4 @@ class Order:
                 if self.flag_load_counter > self.MAX_LOAD_COUNTER:
                     break
         if self.has_error_loading:
-            Alert("Error in loading data", self.tracking_url)
+            ALERT_MANAGER.Alert("Error in loading data", self.tracking_url)
