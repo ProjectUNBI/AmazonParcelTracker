@@ -83,14 +83,14 @@ def getdump():
     return DUMP_DATA
 
 
-@myflask.route('/allertalloff')
+@myflask.route('/alertalloff')
 def alertalloff():
     global ALERT_MANAGER
     ALERT_MANAGER.DisEngageAllAlert()
     return '{"status":true}'
 
 
-@myflask.route('/alleroff')
+@myflask.route('/alertoff')
 def alertoff():
     global ALERT_MANAGER
     ALERT_MANAGER.DisEngageAlert()
