@@ -4,10 +4,11 @@ from threading import Thread
 
 import jsonpickle
 
+from AmazonTracker.Constant import *
 from AmazonTracker.UserInteraaction import updatedataToUser
 from MyConfig.Config import AMAZON_ORDERS
 from Objects.Order import Order
-from AmazonTracker.Constant import *
+
 
 def read_amazon_orders(loop):
     global ORDER_DETAIL, READ_FILE_DELAY
@@ -59,49 +60,63 @@ def handle_order_tracker():
         trackable_order = []
         for order in orderlist:
             trackable_order.extend(make_track_order_url(order, loadtime))
-        print("",flush=True)
+        print("", flush=True)
         for order in trackable_order:
             order: Order = order
             order.load_order_progress()
-            print(".",end="",flush=True)
+            print(".", end="", flush=True)
             time.sleep(DELAY_PER_ORDER_CHECK)  # not to block by amazon srever
-        print("",flush=True)
+        print("", flush=True)
         DUMP_DATA = jsonpickle.encode(trackable_order)
         updatedataToUser(trackable_order)  ########We update here
         time.sleep(LOAD_TRACK_DELAY)
 
 
 ################Flask Server############
-from flask import Flask
+from flask import Flask, send_from_directory
 
+pathtohtml = "/home/pi/Desktop/scripts/AmazonParcelTracker/html"
 myflask = Flask(__name__)
 
+Cache = {}
 
-@myflask.route('/amazon')
+
+@myflask.route("/<path:path>")
+def static_dir(path):
+    if path == "amazon":
+        return getdump()
+
+    if path == "offoutofdelivery":
+        return offoutofdelivery()
+    if path == "alertoff":
+        return alertoff()
+    if path == "alertoffall":
+        return alertalloff()
+    return send_from_directory(pathtohtml, path)
+
+
 def getdump():
     global DUMP_DATA
     return DUMP_DATA
 
 
-@myflask.route('/alertalloff')
 def alertalloff():
     global ALERT_MANAGER
     ALERT_MANAGER.DisEngageAllAlert()
     return '{"status":true}'
 
 
-@myflask.route('/alertoff')
 def alertoff():
     global ALERT_MANAGER
     ALERT_MANAGER.DisEngageAlert()
     return '{"status":true}'
+
 
 @myflask.route('/offoutofdelivery')
 def offoutofdelivery():
     global ALERT_MANAGER
     ALERT_MANAGER.DisEngageOutOfDeliveryAlert()
     return '{"status":true}'
-
 
 
 def serve():

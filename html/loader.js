@@ -163,7 +163,7 @@ function clickturnoff() {
             console.log("Succes fully sent turn off intent");
         }
     }
-    xmlHttp.open("GET", "offalarm", true); // true for asynchronous 
+    xmlHttp.open("GET", "offoutofdelivery", true); // true for asynchronous
     xmlHttp.send(null);
 }
 
@@ -176,7 +176,7 @@ function reset() {
             resetbtn.textContent = "Reset done";
         }
     }
-    xmlHttp.open("GET", "reset", true); // true for asynchronous 
+    xmlHttp.open("GET", "alertoff", true); // true for asynchronous
     xmlHttp.send(null);
 }
 
