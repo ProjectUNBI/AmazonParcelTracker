@@ -1,7 +1,8 @@
+import time
 import traceback
 from datetime import datetime
 
-from AmazonTracker.Constant import ALERT_MANAGER
+from AmazonTracker.Constant import ALERT_MANAGER, RETRY_TRACK_DELAY
 from Objects.TrackSoupUtil import track
 
 
@@ -25,7 +26,7 @@ class Order:
         self.loaded_time_human_readable = 0
 
         self.flag_load_counter = 0
-        self.MAX_LOAD_COUNTER = 10
+        self.MAX_LOAD_COUNTER = 30
 
     def get_mili_to_date(self, timemilli):
         date = datetime.fromtimestamp(timemilli / 1000.0)
@@ -35,6 +36,7 @@ class Order:
     def load_order_progress(self):
         if not self.has_error_loading:
             return
+        error = "....."
         while True:
             try:
                 self.track_progress, self.is_out_for_deliver, self.last_tract_location = track(self.tracking_url)
@@ -44,7 +46,9 @@ class Order:
                 self.has_error_loading = False
                 if self.is_out_for_deliver:
                     ALERT_MANAGER.AlertOutOfDelivery()
-            except:
+            except Exception as e:
+                print(e)
+                error = e
                 self.has_error_loading = True
                 traceback.print_exc()
                 print("Error in tracking order...")
@@ -54,5 +58,7 @@ class Order:
                 self.flag_load_counter += 1
                 if self.flag_load_counter > self.MAX_LOAD_COUNTER:
                     break
+                time.sleep(RETRY_TRACK_DELAY)
         if self.has_error_loading:
-            ALERT_MANAGER.Alert("Error in loading data", self.tracking_url)
+            print("Error load in : ", self.tracking_url)
+            ALERT_MANAGER.Alert("Error in loading data", self.tracking_url, error)
